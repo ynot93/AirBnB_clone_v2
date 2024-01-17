@@ -5,7 +5,8 @@ from models.base_model import BaseModel
 from models import storage
 import os
 
-
+@unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                 'fileStorage test not supported')
 class test_fileStorage(unittest.TestCase):
     """ Class to test the file storage method """
 
@@ -63,7 +64,7 @@ class test_fileStorage(unittest.TestCase):
     def test_reload(self):
         """ Storage file is successfully loaded to __objects """
         new = BaseModel()
-        storage.save()
+        new.save()
         storage.reload()
         for obj in storage.all().values():
             loaded = obj
