@@ -26,13 +26,14 @@ class Place(BaseModel, Base):
     amenity_ids = []
 
     if getenv('HBNB_TYPE_STORAGE') == 'db':
-        reviews = relationship('Review', backref='place', cascade='all, delete')
+        reviews = relationship("Review", cascade='all, delete, delete-orphan',
+                               backref="place")
     else:
         @property
         def reviews(self):
             """Getter attribute for reviews in File Storage"""
             from models import storage
-            
+
             place_reviews = []
             all_reviews = storage.all(Review)
 
