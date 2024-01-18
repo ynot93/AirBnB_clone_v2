@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
-from models.amenity import Amenity
 from models.review import Review
 from sqlalchemy import Column, String, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship
@@ -25,18 +24,45 @@ class Place(BaseModel, Base):
     longitude = Column(Float, nullable=True)
     amenity_ids = []
 
-    if getenv('HBNB_TYPE_STORAGE') == 'db':
-        reviews = relationship('Review', backref='place', cascade='all, delete')
-    else:
-        @property
-        def reviews(self):
-            """Getter attribute for reviews in File Storage"""
-            from models import storage
+    def __init__(self, *args, **kwargs):
+        """ Place class constructor """
+        super().__init__(*args, **kwargs)
+        from models.amenity import Amenity
+    
+        if getenv('HBNB_TYPE_STORAGE') == 'db':
+            reviews = relationship('Review', backref='place', cascade='all, delete')
+            amenities = relationship('Amenity', secondary='place_amenity', back_populates='places', viewonly=False)
+        else:
+            @property
+            def reviews(self):
+                """Getter attribute for reviews in File Storage"""
+                from models import storage
             
-            place_reviews = []
-            all_reviews = storage.all(Review)
+                place_reviews = []
+                all_reviews = storage.all(Review)
 
-            for review in all_reviews.values():
-                if review.place_id == self.id:
-                    place_reviews.append(review)
-            return place_reviews
+                for review in all_reviews.values():
+                    if review.place_id == self.id:
+                        place_reviews.append(review)
+                return place_reviews
+
+            @property
+            def amenities(self):
+                """Getter methods for amenities in File Storage"""
+                from models import storage
+
+                place_amenities = []
+                all_amenities = storage.all(Amenity)
+
+                for amenity in all_amenities.values():
+                    if amenity.id in self.amenity_ids:
+                        place_amenities.append(ammenity)
+                return place_amenities
+
+            @amenities.setter
+            def amenities(self, amenity):
+                """Setter method for amenities in File Storage"""
+                if isinstance(amenity, Amenity):
+                    if amenity.id not in self.amenity_ids:
+                        self.amenity_ids.append(amenity.id)
+
