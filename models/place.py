@@ -24,20 +24,34 @@ class Place(BaseModel, Base):
     longitude = Column(Float, nullable=True)
     amenity_ids = []
 
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
+        reviews = relationship("Review", cascade='all, delete, delete-orphan',
+                               backref="place")
+    else:
+        @property
+        def reviews(self):
+            """Getter attribute for reviews in File Storage"""
+            from models import storage
+
+            place_reviews = []
+            all_reviews = storage.all(Review)
+
     def __init__(self, *args, **kwargs):
         """ Place class constructor """
         super().__init__(*args, **kwargs)
         from models.amenity import Amenity
-    
+
         if getenv('HBNB_TYPE_STORAGE') == 'db':
-            reviews = relationship('Review', backref='place', cascade='all, delete')
-            amenities = relationship('Amenity', secondary='place_amenity', back_populates='places', viewonly=False)
+            reviews = relationship('Review', backref='place',
+                                   cascade='all, delete')
+            amenities = relationship('Amenity', secondary='place_amenity',
+                                     back_populates='places', viewonly=False)
         else:
             @property
             def reviews(self):
                 """Getter attribute for reviews in File Storage"""
                 from models import storage
-            
+
                 place_reviews = []
                 all_reviews = storage.all(Review)
 
@@ -65,4 +79,3 @@ class Place(BaseModel, Base):
                 if isinstance(amenity, Amenity):
                     if amenity.id not in self.amenity_ids:
                         self.amenity_ids.append(amenity.id)
-
