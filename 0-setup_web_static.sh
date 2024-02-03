@@ -6,8 +6,12 @@ sudo apt-get update
 sudo apt-get -y install nginx
 
 # Create necessary folders
-sudo mkdir -p /data/web_static/releases/test /data/web_static/shared
-sudo chown -R ubuntu:ubuntu /data/
+sudo mkdir -p /data/
+sudo mkdir -p /data/web_static/
+sudo mkdir -p /data/web_static/releases/
+sudo mkdir -p /data/web_static/releases/test 
+sudo mkdir -p /data/web_static/shared
+sudo touch /data/web_static/releases/test/index.html
 
 # Create test HTML file
 echo "<html>
@@ -20,6 +24,8 @@ echo "<html>
 
 # Recreate symbolic link
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
+
+sudo chown -R ubuntu:ubuntu /data/
 
 # Update Nginx configuration
 nginx_config="/etc/nginx/sites-enabled/default"
