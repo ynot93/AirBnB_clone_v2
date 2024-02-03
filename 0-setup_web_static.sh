@@ -22,9 +22,11 @@ echo "<html>
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
 # Update Nginx configuration
-nginx_config="/etc/nginx/sites-available/default"
+nginx_config="/etc/nginx/sites-enabled/default"
 nginx_alias="\tlocation /hbnb_static/ {\n\talias /data/web_static/current/;\n}\n"
 sudo sed -i "37i $nginx_alias" "$nginx_config"
 
 # Restart Nginx
 sudo service nginx restart
+
+exit 0
