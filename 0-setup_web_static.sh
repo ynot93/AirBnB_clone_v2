@@ -7,7 +7,7 @@ sudo apt-get -y install nginx
 
 # Create necessary folders
 sudo mkdir -p /data/web_static/releases/test /data/web_static/shared
-sudo chown -R ubuntu:ubuntu /data
+sudo chown -R ubuntu:ubuntu /data/
 
 # Create test HTML file
 echo "<html>
