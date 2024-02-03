@@ -10,6 +10,7 @@ from os.path import exists
 env.hosts = ['54.87.250.109', '54.90.5.67']
 env.user = 'ubuntu'
 
+
 def do_deploy(archive_path):
     """
     Distributes an archive to web servers.
@@ -19,7 +20,6 @@ def do_deploy(archive_path):
 
     Returns:
         bool: True if all operations are correct correctly, otherwise False.
-    
     """
     if not exists(archive_path):
         return False
@@ -34,8 +34,8 @@ def do_deploy(archive_path):
 
         run('rm /tmp/{}.tgz'.format(file_no_ext))
 
-        run('mv /data/web_static/releases/{}/web_static/* /data/web_static/releases/{}/'
-            .format(file_no_ext, file_no_ext))
+        run(('mv /data/web_static/releases/{}/web_static/* '
+             '/data/web_static/releases/{}/').format(file_no_ext, file_no_ext))
 
         run('rm -rf /data/web_static/releases/{}/web_static'
             .format(file_no_ext))
@@ -51,6 +51,7 @@ def do_deploy(archive_path):
     except Exception as e:
         print(e)
         return False
+
 
 if __name__ == "__main__":
     archive_path = 'versions/web_static_20240202021833.tgz'
