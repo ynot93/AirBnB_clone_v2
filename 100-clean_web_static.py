@@ -4,8 +4,7 @@ Deletes archives that are out of date
 
 """
 
-from fabric.api import env, run, local
-from datetime import datetime
+from fabric.api import *
 import os
 
 env.hosts = ['54.87.250.109', '54.90.5.67']
@@ -18,17 +17,18 @@ def do_clean(number=0):
     Deletes unnecessary archives from versions and web_static/releases folders
 
     """
-    number = int(number)
-    if number < 0:
-        return
+    if int(number) == 0:
+        number = 1
+    else:
+        int(number)
 
-    local("ls -lt versions | tail -n +{} | awk '{{print $NF}}' | "
-          "xargs -I {{}} rm -f versions/{{}}".format(number + 1))
-    run("ls -lt /data/web_static/releases | tail -n +{} | "
-        "awk '{{print $NF}}' | "
-        "xargs -I {{}} rm -rf /data/web_static/releases/{{}}"
-        .format(number + 1))
+    archives = sorted(os.listdir("versions"))
+    [archives.pop() for i in range(number)]
+    with lcd("versions"):
+        [local("rm ./{}".format(a)) for a in archives]
 
-
-if __name__ == "__main__":
-    do_clean(number=2)
+    with cd("/data/web_static/releases"):
+        archives = run("ls -tr").split()
+        archives = [a for a in archives if "web_static_" in a]
+        [archives.pop() for i in range(number)]
+        [run("rm -rf ./{}".format(a)) for a in archives]
