@@ -20,7 +20,7 @@ def hello():
 
 
 @app.route('/hbnb', strict_slashes=False)
-def hello():
+def hbnb():
     """
     Display HBNB
 
@@ -35,7 +35,7 @@ def c(text):
 
     """
     text = text.replace('_', ' ')	
-    return f"C {text}"
+    return "C {}".format(text)
 
 
 if __name__ == "__main__":
