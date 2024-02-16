@@ -34,7 +34,7 @@ def c(text):
     Display dynamic variable on route
 
     """
-    text = text.replace('_', ' ')	
+    text = text.replace('_', ' ')
     return "C {}".format(text)
 
 
