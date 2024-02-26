@@ -10,6 +10,7 @@ from models.state import State
 
 app = Flask(__name__)
 
+
 @app.teardown_appcontext
 def clean_up(exception=None):
     """
@@ -17,6 +18,7 @@ def clean_up(exception=None):
 
     """
     storage.close()
+
 
 @app.route('/states_list', strict_slashes=False)
 def get_states():
