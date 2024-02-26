@@ -16,7 +16,7 @@ def states():
 
     """
     states = storage.all(State).values()
-    return render_template('9-states.html', states=states)
+    return render_template('9-states.html', states=states, mode='all')
 
 
 @app.route('/states/<id>', strict_slashes=False)
@@ -27,9 +27,9 @@ def state_cities(id):
     """
     state = storage.get(State, id)
     if state:
-        return render_template('9-states.html', states=[state])
+        return render_template('9-states.html', state=state, mode='one')
     else:
-        return render_template('9-states.html', states=None)
+        return render_template('9-states.html')
 
 
 @app.teardown_appcontext

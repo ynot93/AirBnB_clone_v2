@@ -6,11 +6,14 @@
     <BODY>
         <H1>States</H1>
         <UL>
-            {% if states %}
+            {% if mode='all' %}
+                <H1>States</H1>
+                <UL>
                 {% for state in states|sort(attribute='name') %}
                     <LI>{{ state.id }}: <B>{{ state.name }}</B></LI>
                 {% endfor %}
-            {% elif state %}
+                </UL>
+            {% elif mode='one' %}
                 <H1>State: {{ state.name }}</H1>
                 <H3>Cities:</H3>
                 <UL>
@@ -19,7 +22,7 @@
                     {% endfor %}
                 </UL>
             {% else %}
-                <H1>Not Found!</H!>
+                <H1>Not Found!</H1>
             {% endif %}
         </UL>
     </BODY>
