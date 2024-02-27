@@ -25,11 +25,10 @@ def state_cities(id):
     Display cities associated with a state
 
     """
-    state = storage.get(State, id)
-    if state:
-        return render_template('9-states.html', state=state, mode='one')
-    else:
-        return render_template('9-states.html')
+    for state in storage.all(State).values():
+        if state.id == id:
+            return render_template('9-states.html', state=state, mode='one')
+    return render_template('9-states.html')
 
 
 @app.teardown_appcontext
